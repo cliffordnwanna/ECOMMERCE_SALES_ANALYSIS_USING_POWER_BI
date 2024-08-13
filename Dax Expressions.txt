@@ -1,0 +1,28 @@
+DAX EXPRESSIONS
+
+1. TotalQuantitySold = SUM('data (2)'[Quantity])
+
+2. AverageUnitPrice = AVERAGE('data (2)'[UnitPrice])
+
+3. NumberOfOrders = DISTINCTCOUNT('data (2)'[InvoiceNo])
+
+4. NumberOfCustomers = DISTINCTCOUNT('data (2)'[CustomerID])
+
+5. AverageItemsPerOrder = DIVIDE([TotalQuantitySold], [NumberOfOrders])
+
+6. AverageOrderValue = DIVIDE([TotalSales], COUNTROWS('data (2)'))
+
+7. NumberOfRepeatCustomers = 
+VAR RepeatCustomers = CALCULATE(
+    COUNTROWS('data (2)'),
+    FILTER(
+        'data (2)',
+        CALCULATE(
+            COUNTROWS('data (2)'),
+            ALLEXCEPT('data (2)', 'data (2)'[CustomerID])
+        ) > 1
+    )
+)
+RETURN
+    DIVIDE(RepeatCustomers, [NumberOfCustomers])
+
